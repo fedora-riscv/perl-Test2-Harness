@@ -1,5 +1,5 @@
 Name:           perl-Test2-Harness
-Version:        0.001081
+Version:        0.001084
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -21,7 +21,6 @@ BuildRequires:  perl(constant)
 BuildRequires:  perl(Cwd)
 BuildRequires:  perl(Data::Dumper)
 BuildRequires:  perl(Data::UUID) >= 1.148
-# DBI::Profile not used at tests
 BuildRequires:  perl(Devel::Cover)
 # Email::Stuffer 0.016 not used at tests
 BuildRequires:  perl(Exporter)
@@ -55,17 +54,19 @@ BuildRequires:  perl(Storable)
 BuildRequires:  perl(Sys::Hostname)
 BuildRequires:  perl(Term::ANSIColor) >= 4.03
 BuildRequires:  perl(Term::Table) >= 0.011
-BuildRequires:  perl(Test2::API) >= 1.302133
-BuildRequires:  perl(Test2::Event) >= 1.302133
-BuildRequires:  perl(Test2::Formatter) >= 1.302133
+BuildRequires:  perl(Test2::API) >= 1.302165
+BuildRequires:  perl(Test2::Event) >= 1.302165
+BuildRequires:  perl(Test2::Formatter) >= 1.302165
 BuildRequires:  perl(Test2::Hub)
+BuildRequires:  perl(Test2::Plugin::MemUsage) >= 0.002001
 BuildRequires:  perl(Test2::Plugin::Times) >= 0.000105
-BuildRequires:  perl(Test2::Util) >= 1.302133
+BuildRequires:  perl(Test2::Plugin::UUID) >= 0.002001
+BuildRequires:  perl(Test2::Util) >= 1.302165
 BuildRequires:  perl(Test2::Util::HashBase)
 BuildRequires:  perl(Test2::Util::Table)
 BuildRequires:  perl(Test2::Util::Term) >= 0.000105
 BuildRequires:  perl(Test2::Util::Times)
-BuildRequires:  perl(Test::Builder::Formatter) >= 1.302133
+BuildRequires:  perl(Test::Builder::Formatter) >= 1.302165
 BuildRequires:  perl(Time::HiRes)
 BuildRequires:  perl(vars)
 # Win32::Console::ANSI not used on Linux
@@ -76,8 +77,8 @@ BuildRequires:  perl(Test2::Tools::AsyncSubtest) >= 0.000105
 BuildRequires:  perl(Test2::Tools::GenTemp)
 BuildRequires:  perl(Test2::Tools::Subtest) >= 0.000105
 BuildRequires:  perl(Test2::V0) >= 0.000105
-BuildRequires:  perl(Test::Builder) >= 1.302133
-BuildRequires:  perl(Test::More) >= 1.302133
+BuildRequires:  perl(Test::Builder) >= 1.302165
+BuildRequires:  perl(Test::More) >= 1.302165
 # App::Yath::Plugin::Git tries "git" command
 Suggests:       git-core
 Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
@@ -104,16 +105,18 @@ Suggests:       perl(Linux::Inotify2)
 Requires:       perl(Module::Pluggable)
 Suggests:       perl(Term::ANSIColor) >= 4.03
 Requires:       perl(Term::Table) >= 0.011
-Requires:       perl(Test2::API) >= 1.302133
-Requires:       perl(Test2::Event) >= 1.302133
-Requires:       perl(Test2::Formatter) >= 1.302133
+Requires:       perl(Test2::API) >= 1.302165
+Requires:       perl(Test2::Event) >= 1.302165
+Requires:       perl(Test2::Formatter) >= 1.302165
 Requires:       perl(Test2::Hub)
+Requires:       perl(Test2::Plugin::MemUsage) >= 0.002001
 Requires:       perl(Test2::Plugin::Times) >= 0.000105
-Requires:       perl(Test2::Util) >= 1.302133
+Requires:       perl(Test2::Plugin::UUID) >= 0.002001
+Requires:       perl(Test2::Util) >= 1.302165
 Requires:       perl(Test2::Util::Table)
 Requires:       perl(Test2::Util::Term) >= 0.000105
 Requires:       perl(Test2::Util::Times)
-Requires:       perl(Test::Builder::Formatter) >= 1.302133
+Requires:       perl(Test::Builder::Formatter) >= 1.302165
 
 # Filter underspecified dependencies
 %global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Data::UUID|File::Path|Getopt::Long|Importer|IO::Handle|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term)\\)$
@@ -146,6 +149,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Mon Aug 19 2019 Petr Pisar <ppisar@redhat.com> - 0.001084-1
+- 0.001084 bump
+
 * Wed Aug 14 2019 Petr Pisar <ppisar@redhat.com> - 0.001081-1
 - 0.001081 bump
 
