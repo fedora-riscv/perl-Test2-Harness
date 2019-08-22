@@ -1,5 +1,5 @@
 Name:           perl-Test2-Harness
-Version:        0.001084
+Version:        0.001085
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -58,13 +58,13 @@ BuildRequires:  perl(Test2::API) >= 1.302165
 BuildRequires:  perl(Test2::Event) >= 1.302165
 BuildRequires:  perl(Test2::Formatter) >= 1.302165
 BuildRequires:  perl(Test2::Hub)
-BuildRequires:  perl(Test2::Plugin::MemUsage) >= 0.002001
-BuildRequires:  perl(Test2::Plugin::Times) >= 0.000105
+BuildRequires:  perl(Test2::Plugin::MemUsage) >= 0.002002
+BuildRequires:  perl(Test2::Plugin::Times) >= 0.000125
 BuildRequires:  perl(Test2::Plugin::UUID) >= 0.002001
 BuildRequires:  perl(Test2::Util) >= 1.302165
 BuildRequires:  perl(Test2::Util::HashBase)
 BuildRequires:  perl(Test2::Util::Table)
-BuildRequires:  perl(Test2::Util::Term) >= 0.000105
+BuildRequires:  perl(Test2::Util::Term) >= 0.000125
 BuildRequires:  perl(Test2::Util::Times)
 BuildRequires:  perl(Test::Builder::Formatter) >= 1.302165
 BuildRequires:  perl(Time::HiRes)
@@ -72,11 +72,11 @@ BuildRequires:  perl(vars)
 # Win32::Console::ANSI not used on Linux
 # Tests:
 BuildRequires:  perl(ok)
-BuildRequires:  perl(Test2::Bundle::Extended) >= 0.000105
-BuildRequires:  perl(Test2::Tools::AsyncSubtest) >= 0.000105
+BuildRequires:  perl(Test2::Bundle::Extended) >= 0.000125
+BuildRequires:  perl(Test2::Tools::AsyncSubtest) >= 0.000125
 BuildRequires:  perl(Test2::Tools::GenTemp)
-BuildRequires:  perl(Test2::Tools::Subtest) >= 0.000105
-BuildRequires:  perl(Test2::V0) >= 0.000105
+BuildRequires:  perl(Test2::Tools::Subtest) >= 0.000125
+BuildRequires:  perl(Test2::V0) >= 0.000125
 BuildRequires:  perl(Test::Builder) >= 1.302165
 BuildRequires:  perl(Test::More) >= 1.302165
 # App::Yath::Plugin::Git tries "git" command
@@ -109,12 +109,12 @@ Requires:       perl(Test2::API) >= 1.302165
 Requires:       perl(Test2::Event) >= 1.302165
 Requires:       perl(Test2::Formatter) >= 1.302165
 Requires:       perl(Test2::Hub)
-Requires:       perl(Test2::Plugin::MemUsage) >= 0.002001
-Requires:       perl(Test2::Plugin::Times) >= 0.000105
+Requires:       perl(Test2::Plugin::MemUsage) >= 0.002002
+Requires:       perl(Test2::Plugin::Times) >= 0.000125
 Requires:       perl(Test2::Plugin::UUID) >= 0.002001
 Requires:       perl(Test2::Util) >= 1.302165
 Requires:       perl(Test2::Util::Table)
-Requires:       perl(Test2::Util::Term) >= 0.000105
+Requires:       perl(Test2::Util::Term) >= 0.000125
 Requires:       perl(Test2::Util::Times)
 Requires:       perl(Test::Builder::Formatter) >= 1.302165
 
@@ -149,6 +149,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Thu Aug 22 2019 Petr Pisar <ppisar@redhat.com> - 0.001085-1
+- 0.001085 bump
+
 * Mon Aug 19 2019 Petr Pisar <ppisar@redhat.com> - 0.001084-1
 - 0.001084 bump
 
