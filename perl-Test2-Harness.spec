@@ -1,11 +1,12 @@
 Name:           perl-Test2-Harness
-Version:        0.001085
+Version:        0.001086
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test2-Harness-%{version}.tar.gz
 BuildArch:      noarch
+BuildRequires:  coreutils
 BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
@@ -59,12 +60,11 @@ BuildRequires:  perl(Test2::Event) >= 1.302165
 BuildRequires:  perl(Test2::Formatter) >= 1.302165
 BuildRequires:  perl(Test2::Hub)
 BuildRequires:  perl(Test2::Plugin::MemUsage) >= 0.002002
-BuildRequires:  perl(Test2::Plugin::Times) >= 0.000125
 BuildRequires:  perl(Test2::Plugin::UUID) >= 0.002001
 BuildRequires:  perl(Test2::Util) >= 1.302165
 BuildRequires:  perl(Test2::Util::HashBase)
 BuildRequires:  perl(Test2::Util::Table)
-BuildRequires:  perl(Test2::Util::Term) >= 0.000125
+BuildRequires:  perl(Test2::Util::Term) >= 0.000126
 BuildRequires:  perl(Test2::Util::Times)
 BuildRequires:  perl(Test::Builder::Formatter) >= 1.302165
 BuildRequires:  perl(Time::HiRes)
@@ -72,13 +72,18 @@ BuildRequires:  perl(vars)
 # Win32::Console::ANSI not used on Linux
 # Tests:
 BuildRequires:  perl(ok)
-BuildRequires:  perl(Test2::Bundle::Extended) >= 0.000125
-BuildRequires:  perl(Test2::Tools::AsyncSubtest) >= 0.000125
+BuildRequires:  perl(Test2::Bundle::Extended) >= 0.000126
+BuildRequires:  perl(Test2::Tools::AsyncSubtest) >= 0.000126
 BuildRequires:  perl(Test2::Tools::GenTemp)
-BuildRequires:  perl(Test2::Tools::Subtest) >= 0.000125
-BuildRequires:  perl(Test2::V0) >= 0.000125
+BuildRequires:  perl(Test2::Tools::Subtest) >= 0.000126
+BuildRequires:  perl(Test2::V0) >= 0.000126
 BuildRequires:  perl(Test::Builder) >= 1.302165
 BuildRequires:  perl(Test::More) >= 1.302165
+# Optional tests:
+# t2/lib/App/Yath/Plugin/SelfTest.pm tries building a C code using a gcc and
+# to run a bash script. But SelfTest.pm itself is never executed.
+# bash not used
+# gcc not used
 # App::Yath::Plugin::Git tries "git" command
 Suggests:       git-core
 Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
@@ -110,11 +115,10 @@ Requires:       perl(Test2::Event) >= 1.302165
 Requires:       perl(Test2::Formatter) >= 1.302165
 Requires:       perl(Test2::Hub)
 Requires:       perl(Test2::Plugin::MemUsage) >= 0.002002
-Requires:       perl(Test2::Plugin::Times) >= 0.000125
 Requires:       perl(Test2::Plugin::UUID) >= 0.002001
 Requires:       perl(Test2::Util) >= 1.302165
 Requires:       perl(Test2::Util::Table)
-Requires:       perl(Test2::Util::Term) >= 0.000125
+Requires:       perl(Test2::Util::Term) >= 0.000126
 Requires:       perl(Test2::Util::Times)
 Requires:       perl(Test::Builder::Formatter) >= 1.302165
 
@@ -127,6 +131,8 @@ a command-line tool for executing the tests under the Test2 harness.
 
 %prep
 %setup -q -n Test2-Harness-%{version}
+# Remove prebuilt tests
+rm t2/non_perl/test.binary
 
 %build
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
@@ -149,6 +155,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Thu Aug 29 2019 Petr Pisar <ppisar@redhat.com> - 0.001086-1
+- 0.001086 bump
+
 * Thu Aug 22 2019 Petr Pisar <ppisar@redhat.com> - 0.001085-1
 - 0.001085 bump
 
