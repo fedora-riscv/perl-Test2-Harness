@@ -1,5 +1,5 @@
 Name:           perl-Test2-Harness
-Version:        0.001091
+Version:        0.001093
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -143,7 +143,7 @@ perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %{_fixperms} $RPM_BUILD_ROOT/*
 
 %check
-unset DBI_PROFILE
+unset DBI_PROFILE GIT_BRANCH GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS
 make test
 
 %files
@@ -155,6 +155,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Wed Sep 04 2019 Petr Pisar <ppisar@redhat.com> - 0.001093-1
+- 0.001093 bump
+
 * Mon Sep 02 2019 Petr Pisar <ppisar@redhat.com> - 0.001091-1
 - 0.001091 bump
 
