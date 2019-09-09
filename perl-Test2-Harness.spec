@@ -1,5 +1,5 @@
 Name:           perl-Test2-Harness
-Version:        0.001095
+Version:        0.001097
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -10,7 +10,8 @@ BuildRequires:  coreutils
 BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
-BuildRequires:  perl(:VERSION) >= 5.8.9
+# 5.10 version from t/Test2/Harness/Run/Runner/ProcMan.t
+BuildRequires:  perl(:VERSION) >= 5.10
 BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
@@ -155,6 +156,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Mon Sep 09 2019 Petr Pisar <ppisar@redhat.com> - 0.001097-1
+- 0.001097 bump
+
 * Thu Sep 05 2019 Petr Pisar <ppisar@redhat.com> - 0.001095-1
 - 0.001095 bump
 
