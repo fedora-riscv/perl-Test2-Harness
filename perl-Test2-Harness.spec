@@ -1,5 +1,5 @@
 Name:           perl-Test2-Harness
-Version:        0.001097
+Version:        0.001099
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -156,6 +156,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Tue Sep 10 2019 Petr Pisar <ppisar@redhat.com> - 0.001099-1
+- 0.001099 bump
+
 * Mon Sep 09 2019 Petr Pisar <ppisar@redhat.com> - 0.001097-1
 - 0.001097 bump
 
