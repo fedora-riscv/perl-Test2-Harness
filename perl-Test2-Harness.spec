@@ -1,6 +1,6 @@
 Name:           perl-Test2-Harness
 Version:        0.001099
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
@@ -156,6 +156,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.001099-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Tue Sep 10 2019 Petr Pisar <ppisar@redhat.com> - 0.001099-1
 - 0.001099 bump
 
