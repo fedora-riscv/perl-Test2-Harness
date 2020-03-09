@@ -1,6 +1,6 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000003
-Version:        1.0.3
+%global cpan_version 1.000010
+Version:        1.0.10
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -52,6 +52,7 @@ BuildRequires:  perl(Scope::Guard)
 BuildRequires:  perl(Storable)
 BuildRequires:  perl(Sys::Hostname)
 BuildRequires:  perl(Term::ANSIColor) >= 4.03
+BuildRequires:  perl(Term::Table) >= 0.015
 BuildRequires:  perl(Test2::API) >= 1.302170
 BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
@@ -89,7 +90,6 @@ BuildRequires:  perl(Test::More) >= 1.302170
 # App::Yath::Plugin::Git tries "git" command
 Suggests:       git-core
 Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
-Requires:       perl(constant)
 Suggests:       perl(Cpanel::JSON::XS)
 Requires:       perl(Data::Dumper)
 Requires:       perl(Data::UUID) >= 1.148
@@ -113,6 +113,7 @@ Requires:       perl(JSON::PP)
 Suggests:       perl(Linux::Inotify2)
 Requires:       perl(Long::Jump) >= 0.000001
 Suggests:       perl(Term::ANSIColor) >= 4.03
+Requires:       perl(Term::Table) >= 0.015
 Requires:       perl(Test2::API) >= 1.302170
 Requires:       perl(Test2::Event) >= 1.302170
 Requires:       perl(Test2::Formatter) >= 1.302170
@@ -121,13 +122,11 @@ Requires:       perl(Test2::Plugin::IOEvents) >= 0.001001
 Requires:       perl(Test2::Plugin::MemUsage) >= 0.002003
 Requires:       perl(Test2::Plugin::UUID) >= 0.002001
 Requires:       perl(Test2::Util) >= 1.302170
-Requires:       perl(Test2::Util::Table)
 Requires:       perl(Test2::Util::Term) >= 0.000127
-Requires:       perl(Test2::Util::Times)
 Requires:       perl(Test::Builder::Formatter) >= 1.302170
 
 # Filter underspecified dependencies
-%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Data::UUID|File::Path|goto::file|Importer|IO::Handle|Long::Jump|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term)\\)$
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Data::UUID|File::Path|goto::file|Importer|IO::Handle|Long::Jump|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term)\\)$
 
 %description
 This is a test harness toolkit for Perl Test2 system. It provides a yath tool,
@@ -147,7 +146,8 @@ perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %check
 unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
     FAILURE_DO_PASS GIT_BRANCH GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
-    T2_HARNESS_JOB_IS_TRY T2_HARNESS_STAGE
+    HARNESS_IS_VERBOSE \
+    T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_STAGE
 make test
 
 %files
@@ -159,6 +159,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Mon Mar 09 2020 Petr Pisar <ppisar@redhat.com> - 1.0.10-1
+- 1.000010 bump
+
 * Mon Mar 02 2020 Petr Pisar <ppisar@redhat.com> - 1.0.3-1
 - 1.000003 bump
 
