@@ -1,6 +1,6 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000013
-Version:        1.0.13
+%global cpan_version 1.000014
+Version:        1.0.14
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -33,6 +33,7 @@ BuildRequires:  perl(File::Temp)
 BuildRequires:  perl(FindBin)
 BuildRequires:  perl(goto::file) >= 0.005
 # HTTP::Tiny 0.070 not used at tests
+# HTTP::Tiny::Multipart not used at tests
 BuildRequires:  perl(Importer) >= 0.025
 BuildRequires:  perl(IO::Compress::Bzip2)
 BuildRequires:  perl(IO::Compress::Gzip)
@@ -101,6 +102,7 @@ Requires:       perl(File::Path) >= 2.11
 Suggests:       perl(FindBin)
 Requires:       perl(goto::file) >= 0.005
 Suggests:       perl(HTTP::Tiny) >= 0.070
+Suggests:       perl(HTTP::Tiny::Multipart) >= 0.08
 Requires:       perl(Importer) >= 0.025
 Requires:       perl(IO::Compress::Bzip2)
 Requires:       perl(IO::Compress::Gzip)
@@ -159,6 +161,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Mon Mar 23 2020 Petr Pisar <ppisar@redhat.com> - 1.0.14-1
+- 1.000014 bump
+
 * Thu Mar 19 2020 Petr Pisar <ppisar@redhat.com> - 1.0.13-1
 - 1.000013 bump
 
