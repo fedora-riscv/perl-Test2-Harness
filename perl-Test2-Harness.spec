@@ -1,6 +1,6 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000015
-Version:        1.0.15
+%global cpan_version 1.000016
+Version:        1.0.16
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -161,6 +161,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Wed Apr 08 2020 Petr Pisar <ppisar@redhat.com> - 1.0.16-1
+- 1.000016 bump
+
 * Tue Mar 24 2020 Petr Pisar <ppisar@redhat.com> - 1.0.15-1
 - 1.000015 bump
 
