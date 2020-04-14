@@ -150,6 +150,12 @@ unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
     FAILURE_DO_PASS GIT_BRANCH GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
     HARNESS_IS_VERBOSE \
     T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_STAGE
+export T2_HARNESS_JOB_COUNT=$(perl -e \
+    'for (@ARGV) { $j=$1 if m/\A-j(\d+)\z/; }; $j=1 unless $j; print "$j"' -- \
+    %{?_smp_mflags})
+export HARNESS_OPTIONS=$(perl -e \
+    'for (@ARGV) { $j=$1 if m/\A-j(\d+)\z/; }; print "j$j" if $j' -- \
+    %{?_smp_mflags})
 make test
 
 %files
