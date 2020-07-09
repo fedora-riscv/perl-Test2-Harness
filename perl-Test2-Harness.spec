@@ -1,12 +1,13 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000019
-Version:        1.0.19
-Release:        2%{?dist}
+%global cpan_version 1.000020
+Version:        1.0.20
+Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test2-Harness-%{cpan_version}.tar.gz
 BuildArch:      noarch
+BuildRequires:  coreutils
 BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
@@ -21,7 +22,7 @@ BuildRequires:  perl(Carp)
 BuildRequires:  perl(constant)
 BuildRequires:  perl(Cwd)
 BuildRequires:  perl(Data::Dumper)
-BuildRequires:  perl(Data::UUID) >= 1.148
+BuildRequires:  perl(Data::UUID)
 BuildRequires:  perl(Devel::Cover)
 # Email::Stuffer 0.016 not used at tests
 BuildRequires:  perl(Exporter)
@@ -58,6 +59,7 @@ BuildRequires:  perl(Test2::API) >= 1.302170
 BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
 BuildRequires:  perl(Test2::Hub)
+# Test2::Plugin::Cover not used at tests
 BuildRequires:  perl(Test2::Plugin::IOEvents) >= 0.001001
 BuildRequires:  perl(Test2::Plugin::MemUsage) >= 0.002003
 BuildRequires:  perl(Test2::Plugin::UUID) >= 0.002001
@@ -93,7 +95,6 @@ Suggests:       git-core
 Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
 Suggests:       perl(Cpanel::JSON::XS)
 Requires:       perl(Data::Dumper)
-Requires:       perl(Data::UUID) >= 1.148
 Suggests:       perl(Devel::Cover)
 Suggests:       perl(Email::Stuffer) >= 0.016
 Requires:       perl(Exporter)
@@ -120,6 +121,7 @@ Requires:       perl(Test2::API) >= 1.302170
 Requires:       perl(Test2::Event) >= 1.302170
 Requires:       perl(Test2::Formatter) >= 1.302170
 Requires:       perl(Test2::Hub)
+Suggests:       perl(Test2::Plugin::Cover) >= 0.000007
 Requires:       perl(Test2::Plugin::IOEvents) >= 0.001001
 Requires:       perl(Test2::Plugin::MemUsage) >= 0.002003
 Requires:       perl(Test2::Plugin::UUID) >= 0.002001
@@ -128,7 +130,7 @@ Requires:       perl(Test2::Util::Term) >= 0.000127
 Requires:       perl(Test::Builder::Formatter) >= 1.302170
 
 # Filter underspecified dependencies
-%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((Data::UUID|File::Path|goto::file|Importer|IO::Handle|Long::Jump|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term)\\)$
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((File::Path|goto::file|Importer|IO::Handle|Long::Jump|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term)\\)$
 
 %description
 This is a test harness toolkit for Perl Test2 system. It provides a yath tool,
@@ -167,6 +169,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Thu Jul 09 2020 Petr Pisar <ppisar@redhat.com> - 1.0.20-1
+- 1.000020 bump
+
 * Thu Jun 25 2020 Jitka Plesnikova <jplesnik@redhat.com> - 1.0.19-2
 - Perl 5.32 rebuild
 
