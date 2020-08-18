@@ -1,7 +1,7 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000020
-Version:        1.0.20
-Release:        2%{?dist}
+%global cpan_version 1.000023
+Version:        1.0.23
+Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
@@ -60,6 +60,7 @@ BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
 BuildRequires:  perl(Test2::Hub)
 # Test2::Plugin::Cover not used at tests
+# Test2::Plugin::DBIProfile not used at tests
 BuildRequires:  perl(Test2::Plugin::IOEvents) >= 0.001001
 BuildRequires:  perl(Test2::Plugin::MemUsage) >= 0.002003
 BuildRequires:  perl(Test2::Plugin::UUID) >= 0.002001
@@ -122,6 +123,7 @@ Requires:       perl(Test2::Event) >= 1.302170
 Requires:       perl(Test2::Formatter) >= 1.302170
 Requires:       perl(Test2::Hub)
 Suggests:       perl(Test2::Plugin::Cover) >= 0.000007
+Suggests:       perl(Test2::Plugin::DBIProfile) >= 0.002002
 Requires:       perl(Test2::Plugin::IOEvents) >= 0.001001
 Requires:       perl(Test2::Plugin::MemUsage) >= 0.002003
 Requires:       perl(Test2::Plugin::UUID) >= 0.002001
@@ -169,6 +171,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Tue Aug 18 2020 Petr Pisar <ppisar@redhat.com> - 1.0.23-1
+- 1.000023 bump
+
 * Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.20-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
