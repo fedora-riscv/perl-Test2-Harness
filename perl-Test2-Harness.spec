@@ -1,6 +1,6 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000023
-Version:        1.0.23
+%global cpan_version 1.000024
+Version:        1.0.24
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -152,7 +152,7 @@ perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %check
 unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
     FAILURE_DO_PASS GIT_BRANCH GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
-    HARNESS_IS_VERBOSE \
+    HARNESS_IS_VERBOSE RESOURCE_TEST \
     T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_STAGE
 export T2_HARNESS_JOB_COUNT=$(perl -e \
     'for (@ARGV) { $j=$1 if m/\A-j(\d+)\z/; }; $j=1 unless $j; print "$j"' -- \
@@ -164,13 +164,16 @@ make test
 
 %files
 %license LICENSE
-%doc Changes README
+%doc Changes README TODO
 %{_bindir}/yath
 %{perl_vendorlib}/*
 %{_mandir}/man1/*
 %{_mandir}/man3/*
 
 %changelog
+* Tue Aug 25 2020 Petr Pisar <ppisar@redhat.com> - 1.0.24-1
+- 1.000024 bump
+
 * Tue Aug 18 2020 Petr Pisar <ppisar@redhat.com> - 1.0.23-1
 - 1.000023 bump
 
