@@ -1,6 +1,6 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000024
-Version:        1.0.24
+%global cpan_version 1.000026
+Version:        1.0.26
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -24,6 +24,7 @@ BuildRequires:  perl(Cwd)
 BuildRequires:  perl(Data::Dumper)
 BuildRequires:  perl(Data::UUID)
 BuildRequires:  perl(Devel::Cover)
+# Devel::NYTProf not used at tests
 # Email::Stuffer 0.016 not used at tests
 BuildRequires:  perl(Exporter)
 BuildRequires:  perl(Fcntl)
@@ -97,6 +98,7 @@ Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
 Suggests:       perl(Cpanel::JSON::XS)
 Requires:       perl(Data::Dumper)
 Suggests:       perl(Devel::Cover)
+Suggests:       perl(Devel::NYTProf)
 Suggests:       perl(Email::Stuffer) >= 0.016
 Requires:       perl(Exporter)
 Requires:       perl(File::Find)
@@ -171,6 +173,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Wed Sep 09 2020 Petr Pisar <ppisar@redhat.com> - 1.0.26-1
+- 1.000026 bump
+
 * Tue Aug 25 2020 Petr Pisar <ppisar@redhat.com> - 1.0.24-1
 - 1.000024 bump
 
