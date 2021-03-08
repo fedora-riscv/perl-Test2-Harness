@@ -1,7 +1,7 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000042
-Version:        1.0.42
-Release:        2%{?dist}
+%global cpan_version 1.000043
+Version:        1.0.43
+Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
@@ -174,6 +174,9 @@ make test
 %{_mandir}/man3/*
 
 %changelog
+* Mon Mar 08 2021 Petr Pisar <ppisar@redhat.com> - 1.0.43-1
+- 1.000043 bump
+
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.42-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
