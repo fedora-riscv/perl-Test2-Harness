@@ -6,8 +6,11 @@ Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test2-Harness-%{cpan_version}.tar.gz
+# Help generators to recognize a Perl code
+Patch0:         Test2-Harness-1.000043-Adapt-tests-to-shebangs.patch
 BuildArch:      noarch
 BuildRequires:  coreutils
+BuildRequires:  findutils
 BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
@@ -87,6 +90,7 @@ BuildRequires:  perl(Test2::Tools::Tiny)
 BuildRequires:  perl(Test2::V0) >= 0.000127
 BuildRequires:  perl(Test::Builder) >= 1.302170
 BuildRequires:  perl(Test::More) >= 1.302170
+BuildRequires:  perl(utf8)
 # Optional tests:
 # t2/lib/App/Yath/Plugin/SelfTest.pm tries building a C code using a gcc and
 # to run a bash script. But SelfTest.pm itself is never executed.
@@ -134,14 +138,37 @@ Requires:       perl(Test2::Util::Term) >= 0.000127
 Requires:       perl(Test::Builder::Formatter) >= 1.302170
 
 # Filter underspecified dependencies
-%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((File::Path|goto::file|Importer|IO::Handle|Long::Jump|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term)\\)$
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((File::Path|goto::file|Importer|IO::Handle|Long::Jump|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term|Test2::V0|Test::Builder|Test::More)\\)$
+# Filter private modules
+%global __requires_exclude %{__requires_exclude}|^perl\\((Bar|Baz|Foo|main::HBase|main::HBase::Wrapped)\\)
+%global __provides_exclude %{?__provides_exclude:%{__provides_exclude}|}^perl\\((AAA|App::Yath::Command::(Broken|Fake|fake)|App::Yath::Plugin::(Options|SelfTest|Test|TestPlugin)|Bar|Baz|BBB|Broken|CCC|FAST|Foo|Resource|SmokePlugin|TestPreload|TestSimplePreload)\\)
 
 %description
 This is a test harness toolkit for Perl Test2 system. It provides a yath tool,
 a command-line tool for executing the tests under the Test2 harness.
 
+%package tests
+Summary:        Tests for %{name}
+Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       coreutils
+Requires:       perl-Test-Harness
+Requires:       perl(Test2::V0) >= 0.000127
+Requires:       perl(Test::Builder) >= 1.302170
+Requires:       perl(Test::More) >= 1.302170
+
+%description tests
+Tests from %{name}. Execute them
+with "%{_libexecdir}/%{name}/test".
+
 %prep
 %setup -q -n Test2-Harness-%{cpan_version}
+chmod -x t2/non_perl/test.c
+# Help generators to recognize a Perl code
+%patch0 -p1
+for F in test.pl $(find t t2 -name '*.t' -o -name '*.tx') t/unit/App/Yath/Plugin/Git.script; do
+    perl -i -MConfig -pe 'print qq{$Config{startperl}\n} if $. == 1 && !s{\A#!.*\bperl}{$Config{startperl}}' "$F"
+    chmod +x "$F"
+done
 
 %build
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
@@ -150,6 +177,36 @@ perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %install
 %{make_install}
 %{_fixperms} $RPM_BUILD_ROOT/*
+# Install tests
+mkdir -p %{buildroot}%{_libexecdir}/%{name}
+cp -a test.pl t t2 %{buildroot}%{_libexecdir}/%{name}
+# Remove tests which enumerate files in ./lib
+for F in t/0-load_all.t t/1-pod_name.t; do
+    rm %{buildroot}%{_libexecdir}/%{name}/"$F"
+done
+# Use /usr/bin/yath
+ln -s %{_bindir} %{buildroot}%{_libexecdir}/%{name}/scripts
+cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
+#!/bin/bash
+set -e
+# t/integration/test.t writes into CWD
+DIR=$(mktemp -d)
+cp -a %{_libexecdir}/%{name}/* "$DIR"
+pushd "$DIR"
+unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
+    FAILURE_DO_PASS GIT_BRANCH GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
+    HARNESS_IS_VERBOSE RESOURCE_TEST \
+    T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_JOB_FILE \
+    T2_HARNESS_STAGE
+export AUTOMATED_TESTING=1
+T2_HARNESS_JOB_COUNT="$(getconf _NPROCESSORS_ONLN)" ./test.pl
+# Do not specify as "./t",
+# <https://github.com/Test-More/Test2-Harness/issues/215>.
+prove -I . -j "$(getconf _NPROCESSORS_ONLN)" -r t
+popd
+rm -r "$DIR"
+EOF
+chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 
 %check
 unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
@@ -157,6 +214,7 @@ unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
     HARNESS_IS_VERBOSE RESOURCE_TEST \
     T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_JOB_FILE \
     T2_HARNESS_STAGE
+export AUTOMATED_TESTING=1
 export T2_HARNESS_JOB_COUNT=$(perl -e \
     'for (@ARGV) { $j=$1 if m/\A-j(\d+)\z/; }; $j=1 unless $j; print "$j"' -- \
     %{?_smp_mflags})
@@ -173,9 +231,13 @@ make test
 %{_mandir}/man1/*
 %{_mandir}/man3/*
 
+%files tests
+%{_libexecdir}/%{name}
+
 %changelog
 * Mon Mar 08 2021 Petr Pisar <ppisar@redhat.com> - 1.0.43-1
 - 1.000043 bump
+- Package tests
 
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.42-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
