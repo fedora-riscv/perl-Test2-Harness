@@ -2,3 +2,4 @@ summary: Upstream tests
 component: perl-Test2-Harness
 require: perl-Test2-Harness-tests
 test: /usr/libexec/perl-Test2-Harness/test
+duration: 45m
