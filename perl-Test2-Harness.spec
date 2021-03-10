@@ -1,7 +1,7 @@
 Name:           perl-Test2-Harness
 %global cpan_version 1.000043
 Version:        1.0.43
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
@@ -152,6 +152,7 @@ Summary:        Tests for %{name}
 Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       coreutils
 Requires:       perl-Test-Harness
+Requires:       perl(FindBin)
 Requires:       perl(Test2::V0) >= 0.000127
 Requires:       perl(Test::Builder) >= 1.302170
 Requires:       perl(Test::More) >= 1.302170
@@ -235,6 +236,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Wed Mar 10 2021 Petr Pisar <ppisar@redhat.com> - 1.0.43-2
+- A test needs FindBin
+
 * Mon Mar 08 2021 Petr Pisar <ppisar@redhat.com> - 1.0.43-1
 - 1.000043 bump
 - Package tests
