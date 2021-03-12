@@ -1,7 +1,7 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000043
-Version:        1.0.43
-Release:        2%{?dist}
+%global cpan_version 1.000044
+Version:        1.0.44
+Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
@@ -201,9 +201,7 @@ unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
     T2_HARNESS_STAGE
 export AUTOMATED_TESTING=1
 T2_HARNESS_JOB_COUNT="$(getconf _NPROCESSORS_ONLN)" ./test.pl
-# Do not specify as "./t",
-# <https://github.com/Test-More/Test2-Harness/issues/215>.
-prove -I . -j "$(getconf _NPROCESSORS_ONLN)" -r t
+prove -I . -j "$(getconf _NPROCESSORS_ONLN)" -r ./t
 popd
 rm -r "$DIR"
 EOF
@@ -236,6 +234,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Fri Mar 12 2021 Petr Pisar <ppisar@redhat.com> - 1.0.44-1
+- 1.000044 bump
+
 * Wed Mar 10 2021 Petr Pisar <ppisar@redhat.com> - 1.0.43-2
 - A test needs FindBin
 
