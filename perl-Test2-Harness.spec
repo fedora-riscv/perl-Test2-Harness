@@ -1,6 +1,9 @@
+# Perform optinonal tests
+%bcond_without perl_Test2_Harness_enables_optional_test
+
 Name:           perl-Test2-Harness
-%global cpan_version 1.000044
-Version:        1.0.44
+%global cpan_version 1.000047
+Version:        1.0.47
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -20,6 +23,7 @@ BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
 BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
 # Run-time:
+# git not used by App::Yath::Plugin::Git at the tests
 BuildRequires:  perl(base)
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(constant)
@@ -63,7 +67,10 @@ BuildRequires:  perl(Test2::API) >= 1.302170
 BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
 BuildRequires:  perl(Test2::Hub)
-# Test2::Plugin::Cover not used at tests
+%if %{with perl_Test2_Harness_enables_optional_test}
+# Minimal version? <https://github.com/Test-More/Test2-Harness/issues/218>
+BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000007
+%endif
 # Test2::Plugin::DBIProfile not used at tests
 BuildRequires:  perl(Test2::Plugin::IOEvents) >= 0.001001
 BuildRequires:  perl(Test2::Plugin::MemUsage) >= 0.002003
@@ -81,7 +88,9 @@ BuildRequires:  perl(Time::HiRes)
 BuildRequires:  perl(lib)
 BuildRequires:  perl(File::Copy)
 BuildRequires:  perl(ok)
+BuildRequires:  perl(Path::Tiny)
 BuildRequires:  perl(Test2::Bundle::Extended) >= 0.000127
+BuildRequires:  perl(Test2::Require::Module)
 BuildRequires:  perl(Test2::Tools::AsyncSubtest) >= 0.000127
 BuildRequires:  perl(Test2::Tools::GenTemp)
 BuildRequires:  perl(Test2::Tools::Spec)
@@ -91,11 +100,14 @@ BuildRequires:  perl(Test2::V0) >= 0.000127
 BuildRequires:  perl(Test::Builder) >= 1.302170
 BuildRequires:  perl(Test::More) >= 1.302170
 BuildRequires:  perl(utf8)
+%if %{with perl_Test2_Harness_enables_optional_test}
 # Optional tests:
 # t2/lib/App/Yath/Plugin/SelfTest.pm tries building a C code using a gcc and
 # to run a bash script. But SelfTest.pm itself is never executed.
 # bash not used
 # gcc not used
+BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000018
+%endif
 # App::Yath::Plugin::Git tries "git" command
 Suggests:       git-core
 Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
@@ -138,10 +150,10 @@ Requires:       perl(Test2::Util::Term) >= 0.000127
 Requires:       perl(Test::Builder::Formatter) >= 1.302170
 
 # Filter underspecified dependencies
-%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((File::Path|goto::file|Importer|IO::Handle|Long::Jump|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term|Test2::V0|Test::Builder|Test::More)\\)$
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((File::Path|goto::file|Importer|IO::Handle|Long::Jump|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term|Test2::V0|Test::Builder|Test::More|Test2::Plugin::Cover)\\)$
 # Filter private modules
-%global __requires_exclude %{__requires_exclude}|^perl\\((Bar|Baz|Foo|main::HBase|main::HBase::Wrapped)\\)
-%global __provides_exclude %{?__provides_exclude:%{__provides_exclude}|}^perl\\((AAA|App::Yath::Command::(Broken|Fake|fake)|App::Yath::Plugin::(Options|SelfTest|Test|TestPlugin)|Bar|Baz|BBB|Broken|CCC|FAST|Foo|Resource|SmokePlugin|TestPreload|TestSimplePreload)\\)
+%global __requires_exclude %{__requires_exclude}|^perl\\((Ax|Bar|Baz|Bx|Cx|Foo|main::HBase|main::HBase::Wrapped)\\)
+%global __provides_exclude %{?__provides_exclude:%{__provides_exclude}|}^perl\\((AAA|Ax|App::Yath::Command::(Broken|Fake|fake)|App::Yath::Plugin::(Options|SelfTest|Test|TestPlugin)|Bar|Baz|Bx|BBB|Broken|CCC|Cx|FAST|Foo|Manager|Plugin|Resource|SmokePlugin|TestPreload|TestSimplePreload)\\)
 
 %description
 This is a test harness toolkit for Perl Test2 system. It provides a yath tool,
@@ -156,6 +168,9 @@ Requires:       perl(FindBin)
 Requires:       perl(Test2::V0) >= 0.000127
 Requires:       perl(Test::Builder) >= 1.302170
 Requires:       perl(Test::More) >= 1.302170
+%if %{with perl_Test2_Harness_enables_optional_test}
+Requires:       perl(Test2::Plugin::Cover) >= 0.000018
+%endif
 
 %description tests
 Tests from %{name}. Execute them
@@ -164,6 +179,10 @@ with "%{_libexecdir}/%{name}/test".
 %prep
 %setup -q -n Test2-Harness-%{cpan_version}
 chmod -x t2/non_perl/test.c
+%if !%{with perl_Test2_Harness_enables_optional_test}
+rm -r t/integration/coverage
+perl -i -ne 'print $_ unless m{\A\Qt/integration/coverage\E}' MANIFEST
+%endif
 # Help generators to recognize a Perl code
 %patch0 -p1
 for F in test.pl $(find t t2 -name '*.t' -o -name '*.tx') t/unit/App/Yath/Plugin/Git.script; do
@@ -195,7 +214,7 @@ DIR=$(mktemp -d)
 cp -a %{_libexecdir}/%{name}/* "$DIR"
 pushd "$DIR"
 unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
-    FAILURE_DO_PASS GIT_BRANCH GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
+    FAILURE_DO_PASS GIT_BRANCH GIT_COMMAND GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
     HARNESS_IS_VERBOSE RESOURCE_TEST \
     T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_JOB_FILE \
     T2_HARNESS_STAGE
@@ -209,7 +228,7 @@ chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 
 %check
 unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
-    FAILURE_DO_PASS GIT_BRANCH GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
+    FAILURE_DO_PASS GIT_BRANCH GIT_COMMAND GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
     HARNESS_IS_VERBOSE RESOURCE_TEST \
     T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_JOB_FILE \
     T2_HARNESS_STAGE
@@ -234,6 +253,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Wed Apr 21 2021 Petr Pisar <ppisar@redhat.com> - 1.0.47-1
+- 1.000047 bump
+
 * Fri Mar 12 2021 Petr Pisar <ppisar@redhat.com> - 1.0.44-1
 - 1.000044 bump
 
