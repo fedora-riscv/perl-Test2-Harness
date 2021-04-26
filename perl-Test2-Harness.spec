@@ -2,8 +2,8 @@
 %bcond_without perl_Test2_Harness_enables_optional_test
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000047
-Version:        1.0.47
+%global cpan_version 1.000048
+Version:        1.0.48
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -68,8 +68,7 @@ BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
 BuildRequires:  perl(Test2::Hub)
 %if %{with perl_Test2_Harness_enables_optional_test}
-# Minimal version? <https://github.com/Test-More/Test2-Harness/issues/218>
-BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000007
+BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000022
 %endif
 # Test2::Plugin::DBIProfile not used at tests
 BuildRequires:  perl(Test2::Plugin::IOEvents) >= 0.001001
@@ -106,7 +105,6 @@ BuildRequires:  perl(utf8)
 # to run a bash script. But SelfTest.pm itself is never executed.
 # bash not used
 # gcc not used
-BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000018
 %endif
 # App::Yath::Plugin::Git tries "git" command
 Suggests:       git-core
@@ -140,7 +138,7 @@ Requires:       perl(Test2::API) >= 1.302170
 Requires:       perl(Test2::Event) >= 1.302170
 Requires:       perl(Test2::Formatter) >= 1.302170
 Requires:       perl(Test2::Hub)
-Suggests:       perl(Test2::Plugin::Cover) >= 0.000007
+Suggests:       perl(Test2::Plugin::Cover) >= 0.000022
 Suggests:       perl(Test2::Plugin::DBIProfile) >= 0.002002
 Requires:       perl(Test2::Plugin::IOEvents) >= 0.001001
 Requires:       perl(Test2::Plugin::MemUsage) >= 0.002003
@@ -253,6 +251,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Mon Apr 26 2021 Petr Pisar <ppisar@redhat.com> - 1.0.48-1
+- 1.000048 bump
+
 * Wed Apr 21 2021 Petr Pisar <ppisar@redhat.com> - 1.0.47-1
 - 1.000047 bump
 
