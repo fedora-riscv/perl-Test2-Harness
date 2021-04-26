@@ -4,7 +4,7 @@
 Name:           perl-Test2-Harness
 %global cpan_version 1.000048
 Version:        1.0.48
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
@@ -167,7 +167,8 @@ Requires:       perl(Test2::V0) >= 0.000127
 Requires:       perl(Test::Builder) >= 1.302170
 Requires:       perl(Test::More) >= 1.302170
 %if %{with perl_Test2_Harness_enables_optional_test}
-Requires:       perl(Test2::Plugin::Cover) >= 0.000018
+# Wrong minimal version <https://github.com/Test-More/Test2-Harness/issues/220>
+Requires:       perl(Test2::Plugin::Cover) >= 0.000022
 %endif
 
 %description tests
@@ -251,6 +252,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Mon Apr 26 2021 Petr Pisar <ppisar@redhat.com> - 1.0.48-2
+- Correct a minimal Test2::Plugin::Cover version
+
 * Mon Apr 26 2021 Petr Pisar <ppisar@redhat.com> - 1.0.48-1
 - 1.000048 bump
 
