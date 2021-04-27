@@ -1,10 +1,7 @@
-# Perform optinonal tests
-%bcond_without perl_Test2_Harness_enables_optional_test
-
 Name:           perl-Test2-Harness
-%global cpan_version 1.000048
-Version:        1.0.48
-Release:        2%{?dist}
+%global cpan_version 1.000049
+Version:        1.0.49
+Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
@@ -67,9 +64,7 @@ BuildRequires:  perl(Test2::API) >= 1.302170
 BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
 BuildRequires:  perl(Test2::Hub)
-%if %{with perl_Test2_Harness_enables_optional_test}
 BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000022
-%endif
 # Test2::Plugin::DBIProfile not used at tests
 BuildRequires:  perl(Test2::Plugin::IOEvents) >= 0.001001
 BuildRequires:  perl(Test2::Plugin::MemUsage) >= 0.002003
@@ -89,7 +84,6 @@ BuildRequires:  perl(File::Copy)
 BuildRequires:  perl(ok)
 BuildRequires:  perl(Path::Tiny)
 BuildRequires:  perl(Test2::Bundle::Extended) >= 0.000127
-BuildRequires:  perl(Test2::Require::Module)
 BuildRequires:  perl(Test2::Tools::AsyncSubtest) >= 0.000127
 BuildRequires:  perl(Test2::Tools::GenTemp)
 BuildRequires:  perl(Test2::Tools::Spec)
@@ -99,13 +93,11 @@ BuildRequires:  perl(Test2::V0) >= 0.000127
 BuildRequires:  perl(Test::Builder) >= 1.302170
 BuildRequires:  perl(Test::More) >= 1.302170
 BuildRequires:  perl(utf8)
-%if %{with perl_Test2_Harness_enables_optional_test}
 # Optional tests:
 # t2/lib/App/Yath/Plugin/SelfTest.pm tries building a C code using a gcc and
 # to run a bash script. But SelfTest.pm itself is never executed.
 # bash not used
 # gcc not used
-%endif
 # App::Yath::Plugin::Git tries "git" command
 Suggests:       git-core
 Requires:       perl(:MODULE_COMPAT_%(eval "`perl -V:version`"; echo $version))
@@ -138,7 +130,7 @@ Requires:       perl(Test2::API) >= 1.302170
 Requires:       perl(Test2::Event) >= 1.302170
 Requires:       perl(Test2::Formatter) >= 1.302170
 Requires:       perl(Test2::Hub)
-Suggests:       perl(Test2::Plugin::Cover) >= 0.000022
+Requires:       perl(Test2::Plugin::Cover) >= 0.000022
 Suggests:       perl(Test2::Plugin::DBIProfile) >= 0.002002
 Requires:       perl(Test2::Plugin::IOEvents) >= 0.001001
 Requires:       perl(Test2::Plugin::MemUsage) >= 0.002003
@@ -163,13 +155,10 @@ Requires:       %{name} = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:       coreutils
 Requires:       perl-Test-Harness
 Requires:       perl(FindBin)
-Requires:       perl(Test2::V0) >= 0.000127
 Requires:       perl(Test::Builder) >= 1.302170
 Requires:       perl(Test::More) >= 1.302170
-%if %{with perl_Test2_Harness_enables_optional_test}
-# Wrong minimal version <https://github.com/Test-More/Test2-Harness/issues/220>
 Requires:       perl(Test2::Plugin::Cover) >= 0.000022
-%endif
+Requires:       perl(Test2::V0) >= 0.000127
 
 %description tests
 Tests from %{name}. Execute them
@@ -178,10 +167,6 @@ with "%{_libexecdir}/%{name}/test".
 %prep
 %setup -q -n Test2-Harness-%{cpan_version}
 chmod -x t2/non_perl/test.c
-%if !%{with perl_Test2_Harness_enables_optional_test}
-rm -r t/integration/coverage
-perl -i -ne 'print $_ unless m{\A\Qt/integration/coverage\E}' MANIFEST
-%endif
 # Help generators to recognize a Perl code
 %patch0 -p1
 for F in test.pl $(find t t2 -name '*.t' -o -name '*.tx') t/unit/App/Yath/Plugin/Git.script; do
@@ -252,6 +237,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Tue Apr 27 2021 Petr Pisar <ppisar@redhat.com> - 1.0.49-1
+- 1.000049 bump
+
 * Mon Apr 26 2021 Petr Pisar <ppisar@redhat.com> - 1.0.48-2
 - Correct a minimal Test2::Plugin::Cover version
 
