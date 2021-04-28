@@ -1,6 +1,6 @@
 Name:           perl-Test2-Harness
-%global cpan_version 1.000049
-Version:        1.0.49
+%global cpan_version 1.000050
+Version:        1.0.50
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -21,7 +21,6 @@ BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
 # Run-time:
 # git not used by App::Yath::Plugin::Git at the tests
-BuildRequires:  perl(base)
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(constant)
 BuildRequires:  perl(Cwd)
@@ -79,6 +78,7 @@ BuildRequires:  perl(Test::Builder::Formatter) >= 1.302170
 BuildRequires:  perl(Time::HiRes)
 # Win32::Console::ANSI not used on Linux
 # Tests:
+BuildRequires:  perl(base)
 BuildRequires:  perl(lib)
 BuildRequires:  perl(File::Copy)
 BuildRequires:  perl(ok)
@@ -237,6 +237,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Wed Apr 28 2021 Petr Pisar <ppisar@redhat.com> - 1.0.50-1
+- 1.000050 bump
+
 * Tue Apr 27 2021 Petr Pisar <ppisar@redhat.com> - 1.0.49-1
 - 1.000049 bump
 
