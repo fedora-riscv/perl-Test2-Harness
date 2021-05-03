@@ -1,6 +1,9 @@
+# Enable a coverage plugin
+%bcond_without perl_Test2_Harness_enables_coverage
+
 Name:           perl-Test2-Harness
-%global cpan_version 1.000051
-Version:        1.0.51
+%global cpan_version 1.000053
+Version:        1.0.53
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -63,7 +66,9 @@ BuildRequires:  perl(Test2::API) >= 1.302170
 BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
 BuildRequires:  perl(Test2::Hub)
+%if %{with perl_Test2_Harness_enables_coverage}
 BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000022
+%endif
 # Test2::Plugin::DBIProfile not used at tests
 BuildRequires:  perl(Test2::Plugin::IOEvents) >= 0.001001
 BuildRequires:  perl(Test2::Plugin::MemUsage) >= 0.002003
@@ -94,6 +99,9 @@ BuildRequires:  perl(Test::Builder) >= 1.302170
 BuildRequires:  perl(Test::More) >= 1.302170
 BuildRequires:  perl(utf8)
 # Optional tests:
+%if %{with perl_Test2_Harness_enables_coverage}
+BuildRequires:  perl(Test2::Require::Module) >= 0.000127
+%endif
 # t2/lib/App/Yath/Plugin/SelfTest.pm tries building a C code using a gcc and
 # to run a bash script. But SelfTest.pm itself is never executed.
 # bash not used
@@ -130,7 +138,9 @@ Requires:       perl(Test2::API) >= 1.302170
 Requires:       perl(Test2::Event) >= 1.302170
 Requires:       perl(Test2::Formatter) >= 1.302170
 Requires:       perl(Test2::Hub)
-Requires:       perl(Test2::Plugin::Cover) >= 0.000022
+%if %{with perl_Test2_Harness_enables_coverage}
+Suggests:       perl(Test2::Plugin::Cover) >= 0.000022
+%endif
 Suggests:       perl(Test2::Plugin::DBIProfile) >= 0.002002
 Requires:       perl(Test2::Plugin::IOEvents) >= 0.001001
 Requires:       perl(Test2::Plugin::MemUsage) >= 0.002003
@@ -140,10 +150,10 @@ Requires:       perl(Test2::Util::Term) >= 0.000127
 Requires:       perl(Test::Builder::Formatter) >= 1.302170
 
 # Filter underspecified dependencies
-%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((File::Path|goto::file|Importer|IO::Handle|Long::Jump|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term|Test2::V0|Test::Builder|Test::More|Test2::Plugin::Cover)\\)$
+%global __requires_exclude %{?__requires_exclude:%{__requires_exclude}|}^perl\\((File::Path|goto::file|Importer|IO::Handle|Long::Jump|Term::Table|Test2::API|Test2::Formatter|Test2::Util|Test2::Util::Term|Test2::V0|Test::Builder|Test::More|Test2::Plugin::Cover|Test2::Require::Module)\\)$
 # Filter private modules
 %global __requires_exclude %{__requires_exclude}|^perl\\((Ax|Bar|Baz|Bx|Cx|Foo|main::HBase|main::HBase::Wrapped)\\)
-%global __provides_exclude %{?__provides_exclude:%{__provides_exclude}|}^perl\\((AAA|Ax|App::Yath::Command::(Broken|Fake|fake)|App::Yath::Plugin::(Options|SelfTest|Test|TestPlugin)|Bar|Baz|Bx|BBB|Broken|CCC|Cx|FAST|Foo|Manager|Plugin|Resource|SmokePlugin|TestPreload|TestSimplePreload)\\)
+%global __provides_exclude %{?__provides_exclude:%{__provides_exclude}|}^perl\\((AAA|Ax|App::Yath::Command::(Broken|Fake|fake)|App::Yath::Plugin::(Options|SelfTest|Test|TestPlugin)|Bar|Baz|Bx|BBB|Broken|CCC|Cx|FAST|Foo|Manager|Plugin|Preload|Preload::[^)]*|Resource|SmokePlugin|TestPreload|TestSimplePreload)\\)
 
 %description
 This is a test harness toolkit for Perl Test2 system. It provides a yath tool,
@@ -157,7 +167,10 @@ Requires:       perl-Test-Harness
 Requires:       perl(FindBin)
 Requires:       perl(Test::Builder) >= 1.302170
 Requires:       perl(Test::More) >= 1.302170
+%if %{with perl_Test2_Harness_enables_coverage}
 Requires:       perl(Test2::Plugin::Cover) >= 0.000022
+Requires:       perl(Test2::Require::Module) >= 0.000127
+%endif
 Requires:       perl(Test2::V0) >= 0.000127
 
 %description tests
@@ -167,6 +180,10 @@ with "%{_libexecdir}/%{name}/test".
 %prep
 %setup -q -n Test2-Harness-%{cpan_version}
 chmod -x t2/non_perl/test.c
+%if !%{with perl_Test2_Harness_enables_coverage}
+rm t/integration/coverage.t
+perl -i -ne 'print $_ unless m{\A\Qt/integration/coverage.t\E\b' MANIFEST
+%endif
 # Help generators to recognize a Perl code
 %patch0 -p1
 for F in test.pl $(find t t2 -name '*.t' -o -name '*.tx') t/unit/App/Yath/Plugin/Git.script; do
@@ -237,6 +254,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Mon May 03 2021 Petr Pisar <ppisar@redhat.com> - 1.0.53-1
+- 1.000053 bump
+
 * Thu Apr 29 2021 Petr Pisar <ppisar@redhat.com> - 1.0.51-1
 - 1.000051 bump
 
