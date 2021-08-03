@@ -2,9 +2,9 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000063
-Version:        1.0.63
-Release:        2%{?dist}
+%global cpan_version 1.000064
+Version:        1.0.64
+Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
@@ -67,7 +67,7 @@ BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
 BuildRequires:  perl(Test2::Hub)
 %if %{with perl_Test2_Harness_enables_coverage}
-BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000022
+BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000024
 %endif
 # Test2::Plugin::DBIProfile not used at tests
 BuildRequires:  perl(Test2::Plugin::IOEvents) >= 0.001001
@@ -115,7 +115,6 @@ Suggests:       perl(Devel::Cover)
 Suggests:       perl(Devel::NYTProf)
 Suggests:       perl(Email::Stuffer) >= 0.016
 Requires:       perl(Exporter)
-Requires:       perl(File::Find)
 Requires:       perl(File::Path) >= 2.11
 Suggests:       perl(FindBin)
 Requires:       perl(goto::file) >= 0.005
@@ -139,7 +138,7 @@ Requires:       perl(Test2::Event) >= 1.302170
 Requires:       perl(Test2::Formatter) >= 1.302170
 Requires:       perl(Test2::Hub)
 %if %{with perl_Test2_Harness_enables_coverage}
-Suggests:       perl(Test2::Plugin::Cover) >= 0.000022
+Suggests:       perl(Test2::Plugin::Cover) >= 0.000024
 %endif
 Suggests:       perl(Test2::Plugin::DBIProfile) >= 0.002002
 Requires:       perl(Test2::Plugin::IOEvents) >= 0.001001
@@ -168,7 +167,7 @@ Requires:       perl(FindBin)
 Requires:       perl(Test::Builder) >= 1.302170
 Requires:       perl(Test::More) >= 1.302170
 %if %{with perl_Test2_Harness_enables_coverage}
-Requires:       perl(Test2::Plugin::Cover) >= 0.000022
+Requires:       perl(Test2::Plugin::Cover) >= 0.000024
 Requires:       perl(Test2::Require::Module) >= 0.000127
 %endif
 Requires:       perl(Test2::V0) >= 0.000127
@@ -254,6 +253,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Tue Aug 03 2021 Petr Pisar <ppisar@redhat.com> - 1.0.64-1
+- 1.000064 bump
+
 * Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.63-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
