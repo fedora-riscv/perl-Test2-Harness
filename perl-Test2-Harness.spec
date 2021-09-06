@@ -2,8 +2,8 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000070
-Version:        1.0.70
+%global cpan_version 1.000071
+Version:        1.0.71
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -205,7 +205,9 @@ for F in t/0-load_all.t t/1-pod_name.t; do
     rm %{buildroot}%{_libexecdir}/%{name}/"$F"
 done
 # Use /usr/bin/yath
-ln -s %{_bindir} %{buildroot}%{_libexecdir}/%{name}/scripts
+ln -s $(realpath --relative-to %{buildroot}%{_libexecdir}/%{name}/scripts \
+    %{buildroot}%{_bindir}) \
+    %{buildroot}%{_libexecdir}/%{name}/scripts
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
 #!/bin/bash
 set -e
@@ -253,6 +255,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Mon Sep 06 2021 Petr Pisar <ppisar@redhat.com> - 1.0.71-1
+- 1.000071 bump
+
 * Thu Sep 02 2021 Petr Pisar <ppisar@redhat.com> - 1.0.70-1
 - 1.000070 bump
 
