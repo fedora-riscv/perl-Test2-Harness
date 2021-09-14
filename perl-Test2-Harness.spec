@@ -2,8 +2,8 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000071
-Version:        1.0.71
+%global cpan_version 1.000072
+Version:        1.0.72
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -32,6 +32,7 @@ BuildRequires:  perl(Data::UUID)
 BuildRequires:  perl(Devel::Cover)
 # Devel::NYTProf not used at tests
 # Email::Stuffer 0.016 not used at tests
+BuildRequires:  perl(Errno)
 BuildRequires:  perl(Exporter)
 BuildRequires:  perl(Fcntl)
 BuildRequires:  perl(File::Find)
@@ -255,6 +256,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Tue Sep 14 2021 Petr Pisar <ppisar@redhat.com> - 1.0.72-1
+- 1.000072 bump
+
 * Mon Sep 06 2021 Petr Pisar <ppisar@redhat.com> - 1.0.71-1
 - 1.000071 bump
 
