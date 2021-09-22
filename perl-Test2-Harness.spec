@@ -2,8 +2,8 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000072
-Version:        1.0.72
+%global cpan_version 1.000073
+Version:        1.0.73
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -68,7 +68,8 @@ BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
 BuildRequires:  perl(Test2::Hub)
 %if %{with perl_Test2_Harness_enables_coverage}
-BuildRequires:  perl(Test2::Plugin::Cover) >= 0.000024
+%define test2_plugin_cover_min_version 0.000025
+BuildRequires:  perl(Test2::Plugin::Cover) >= %{test2_plugin_cover_min_version}
 %endif
 # Test2::Plugin::DBIProfile not used at tests
 BuildRequires:  perl(Test2::Plugin::IOEvents) >= 0.001001
@@ -101,7 +102,8 @@ BuildRequires:  perl(Test::More) >= 1.302170
 BuildRequires:  perl(utf8)
 # Optional tests:
 %if %{with perl_Test2_Harness_enables_coverage}
-BuildRequires:  perl(Test2::Require::Module) >= 0.000127
+%define test2_require_module_min_version 0.000127
+BuildRequires:  perl(Test2::Require::Module) >= %{test2_require_module_min_version}
 %endif
 # t2/lib/App/Yath/Plugin/SelfTest.pm tries building a C code using a gcc and
 # to run a bash script. But SelfTest.pm itself is never executed.
@@ -139,7 +141,7 @@ Requires:       perl(Test2::Event) >= 1.302170
 Requires:       perl(Test2::Formatter) >= 1.302170
 Requires:       perl(Test2::Hub)
 %if %{with perl_Test2_Harness_enables_coverage}
-Suggests:       perl(Test2::Plugin::Cover) >= 0.000024
+Suggests:       perl(Test2::Plugin::Cover) >= %{test2_plugin_cover_min_version}
 %endif
 Suggests:       perl(Test2::Plugin::DBIProfile) >= 0.002002
 Requires:       perl(Test2::Plugin::IOEvents) >= 0.001001
@@ -168,8 +170,8 @@ Requires:       perl(FindBin)
 Requires:       perl(Test::Builder) >= 1.302170
 Requires:       perl(Test::More) >= 1.302170
 %if %{with perl_Test2_Harness_enables_coverage}
-Requires:       perl(Test2::Plugin::Cover) >= 0.000024
-Requires:       perl(Test2::Require::Module) >= 0.000127
+Requires:       perl(Test2::Plugin::Cover) >= %{test2_plugin_cover_min_version}
+Requires:       perl(Test2::Require::Module) >= %{test2_require_module_min_version}
 %endif
 Requires:       perl(Test2::V0) >= 0.000127
 
@@ -206,7 +208,7 @@ for F in t/0-load_all.t t/1-pod_name.t; do
     rm %{buildroot}%{_libexecdir}/%{name}/"$F"
 done
 # Use /usr/bin/yath
-ln -s $(realpath --relative-to %{buildroot}%{_libexecdir}/%{name}/scripts \
+ln -s $(realpath --relative-to %{buildroot}%{_libexecdir}/%{name} \
     %{buildroot}%{_bindir}) \
     %{buildroot}%{_libexecdir}/%{name}/scripts
 cat > %{buildroot}%{_libexecdir}/%{name}/test << 'EOF'
@@ -256,6 +258,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Wed Sep 22 2021 Petr Pisar <ppisar@redhat.com> - 1.0.73-1
+- 1.000073 bump
+
 * Tue Sep 14 2021 Petr Pisar <ppisar@redhat.com> - 1.0.72-1
 - 1.000072 bump
 

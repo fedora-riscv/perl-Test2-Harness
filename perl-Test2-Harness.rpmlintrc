@@ -1,6 +1,6 @@
 addFilter('spelling-error .* yath')
 addFilter('-tests\.noarch: E: zero-length .*/t/yath_script/nested/scripts/yath')
-addFilter('-tests\.noarch: W: dangling-symlink .*/scripts')
+addFilter('-tests\.noarch: W: dangling-relative-symlink .*/scripts')
 addFilter('-tests\.noarch: W: devel-file-in-non-devel-package .*/t2/non_perl/test.c')
 addFilter('-tests\.noarch: W: files-duplicate .*/t/')
 addFilter('-tests\.noarch: W: hidden-file-or-dir .*/\.yath.*\.rc')
