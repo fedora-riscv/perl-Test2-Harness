@@ -1,0 +1,80 @@
+From 3208cde5589cf1736b1e0f1fa6f1763286f9ef0d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Mon, 25 Oct 2021 14:09:06 +0200
+Subject: [PATCH] tests: Always handle relative file names as relative
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+If tests were placed under /tmp, t/unit/Test2/Harness/TestFile.t failed like this:
+
+[  FAIL  ]  job  1  +~binary
+[  PASS  ]  job  1    + File is binary
+[  PASS  ]  job  1    + File must be executable
+[  PASS  ]  job  1    + No SHBANG switches
+[  PASS  ]  job  1    + No shbang
+[  FAIL  ]  job  1    + Got queue item data
+[  DEBUG ]  job  1    | t/unit/Test2/Harness/TestFile.t line 505
+(  DIAG  )  job  1    | +------------+------------------------+----+------------------------+-----+
+(  DIAG  )  job  1    | | PATH       | GOT                    | OP | CHECK                  | LNs |
+(  DIAG  )  job  1    | +------------+------------------------+----+------------------------+-----+
+(  DIAG  )  job  1    | | {rel_file} | ../yath-46667-SQtwyt/t | =~ | (?^:\/tmp\/yath\-46667 | 505 |
+(  DIAG  )  job  1    | |            | mp/GY0EEe/ZOzcbbwBDu/b |    | \-SQtwyt\/tmp\/GY0EEe\ |     |
+(  DIAG  )  job  1    | |            | inary                  |    | /ZOzcbbwBDu\/binary$)  |     |
+(  DIAG  )  job  1    | +------------+------------------------+----+------------------------+-----+
+[  PLAN  ]  job  1    | Expected assertions: 5
+            job  1    ^
+(  DIAG  )  job  1    Failed test 'binary'
+(  DIAG  )  job  1    at t/unit/Test2/Harness/TestFile.t line 531.
+
+A relative method works in regardless of a location of the tests and the temporary path.
+
+https://github.com/Test-More/Test2-Harness/issues/234
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ t/unit/Test2/Harness/TestFile.t | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/t/unit/Test2/Harness/TestFile.t b/t/unit/Test2/Harness/TestFile.t
+index 937deab2..f0daa2d8 100644
+--- a/t/unit/Test2/Harness/TestFile.t
++++ b/t/unit/Test2/Harness/TestFile.t
+@@ -509,7 +509,7 @@ subtest binary => sub {
+             duration    => 'medium',
+             stage       => undef,
+             file        => match qr{\Q$path\E$},
+-            rel_file    => match qr{\Q$path\E$},
++            rel_file    => $binary->relative,
+             job_name    => 42,
+             job_id      => T(),
+             rank        => T(),
+@@ -557,7 +557,7 @@ subtest not_perl => sub {
+             duration    => 'medium',
+             stage       => undef,
+             file        => match qr{\Q$path\E$},
+-            rel_file    => match qr{\Q$path\E$},
++            rel_file    => $not_perl->relative,
+             job_name    => 42,
+             job_id      => T(),
+             rank        => T(),
+@@ -606,7 +606,7 @@ subtest not_env_perl => sub {
+             duration    => 'medium',
+             stage       => undef,
+             file        => match qr{\Q$path\E$},
+-            rel_file    => match qr{\Q$path\E$},
++            rel_file    => $not_env_perl->relative,
+             job_name    => 42,
+             job_id      => T(),
+             rank        => T(),
+@@ -638,7 +638,7 @@ subtest smoke => sub {
+             duration    => 'medium',
+             stage       => undef,
+             file        => match qr{\Q$path\E$},
+-            rel_file    => match qr{\Q$path\E$},
++            rel_file    => $smoke1->relative,
+             job_name    => 42,
+             rank        => T(),
+             job_id      => T(),
+-- 
+2.31.1
+

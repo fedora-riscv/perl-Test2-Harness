@@ -4,13 +4,15 @@
 Name:           perl-Test2-Harness
 %global cpan_version 1.000076
 Version:        1.0.76
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test2-Harness-%{cpan_version}.tar.gz
 # Help generators to recognize a Perl code
 Patch0:         Test2-Harness-1.000043-Adapt-tests-to-shebangs.patch
+# Fix running tests from /tmp, bug #2016544, GH#234, proposed to the upstream
+Patch1:         Test2-Harness-1.000076-tests-Always-handle-relative-file-names-as-relative.patch
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -181,6 +183,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 %setup -q -n Test2-Harness-%{cpan_version}
+%patch1 -p1
 chmod -x t2/non_perl/test.c
 %if !%{with perl_Test2_Harness_enables_coverage}
 for T in t/integration/coverage{,2,3,4}.t; do
@@ -260,6 +263,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Mon Oct 25 2021 Petr Pisar <ppisar@redhat.com> - 1.0.76-2
+- Fix running tests from /tmp (bug #2016544)
+
 * Mon Oct 25 2021 Petr Pisar <ppisar@redhat.com> - 1.0.76-1
 - 1.000076 bump
 
