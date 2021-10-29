@@ -1,0 +1,31 @@
+From 66a70c4cbd238a2addfb26b640f900333a6b64cd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 29 Oct 2021 12:20:08 +0200
+Subject: [PATCH] Stop loading unused B
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Related to commit ea4faee64df5687d95be9183d57a04fc9040e411.
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Test2/Harness/Runner/Preloader.pm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/Test2/Harness/Runner/Preloader.pm b/lib/Test2/Harness/Runner/Preloader.pm
+index b3641669..d84d4756 100644
+--- a/lib/Test2/Harness/Runner/Preloader.pm
++++ b/lib/Test2/Harness/Runner/Preloader.pm
+@@ -4,7 +4,7 @@ use warnings;
+ 
+ our $VERSION = '1.000078';
+ 
+-use B();
++#use B();
+ use Carp qw/confess croak/;
+ use Fcntl qw/LOCK_EX LOCK_UN/;
+ use Time::HiRes qw/time/;
+-- 
+2.31.1
+

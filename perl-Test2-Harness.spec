@@ -2,17 +2,19 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000076
-Version:        1.0.76
-Release:        2%{?dist}
+%global cpan_version 1.000078
+Version:        1.0.78
+Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test2-Harness-%{cpan_version}.tar.gz
-# Help generators to recognize a Perl code
-Patch0:         Test2-Harness-1.000043-Adapt-tests-to-shebangs.patch
 # Fix running tests from /tmp, bug #2016544, GH#234, proposed to the upstream
-Patch1:         Test2-Harness-1.000076-tests-Always-handle-relative-file-names-as-relative.patch
+Patch0:         Test2-Harness-1.000076-tests-Always-handle-relative-file-names-as-relative.patch
+# Do not depenend on unused B, GH#236, proposed to the upstream
+Patch1:         Test2-Harness-1.000078-Stop-loading-unused-B.patch
+# Help generators to recognize a Perl code
+Patch99:        Test2-Harness-1.000043-Adapt-tests-to-shebangs.patch
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -183,6 +185,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 %setup -q -n Test2-Harness-%{cpan_version}
+%patch0 -p1
 %patch1 -p1
 chmod -x t2/non_perl/test.c
 %if !%{with perl_Test2_Harness_enables_coverage}
@@ -192,7 +195,7 @@ for T in t/integration/coverage{,2,3,4}.t; do
 done
 %endif
 # Help generators to recognize a Perl code
-%patch0 -p1
+%patch99 -p1
 for F in test.pl $(find t t2 -name '*.t' -o -name '*.tx') t/unit/App/Yath/Plugin/Git.script; do
     perl -i -MConfig -pe 'print qq{$Config{startperl}\n} if $. == 1 && !s{\A#!.*\bperl}{$Config{startperl}}' "$F"
     chmod +x "$F"
@@ -263,6 +266,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Fri Oct 29 2021 Petr Pisar <ppisar@redhat.com> - 1.0.78-1
+- 1.000078 bump
+
 * Mon Oct 25 2021 Petr Pisar <ppisar@redhat.com> - 1.0.76-2
 - Fix running tests from /tmp (bug #2016544)
 
