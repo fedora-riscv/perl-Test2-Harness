@@ -2,17 +2,13 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000078
-Version:        1.0.78
+%global cpan_version 1.000079
+Version:        1.0.79
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test2-Harness-%{cpan_version}.tar.gz
-# Fix running tests from /tmp, bug #2016544, GH#234, proposed to the upstream
-Patch0:         Test2-Harness-1.000076-tests-Always-handle-relative-file-names-as-relative.patch
-# Do not depenend on unused B, GH#236, proposed to the upstream
-Patch1:         Test2-Harness-1.000078-Stop-loading-unused-B.patch
 # Help generators to recognize a Perl code
 Patch99:        Test2-Harness-1.000043-Adapt-tests-to-shebangs.patch
 BuildArch:      noarch
@@ -28,6 +24,7 @@ BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
 # Run-time:
 # git not used by App::Yath::Plugin::Git at the tests
+BuildRequires:  perl(B)
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(constant)
 BuildRequires:  perl(Cwd)
@@ -185,8 +182,6 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 %setup -q -n Test2-Harness-%{cpan_version}
-%patch0 -p1
-%patch1 -p1
 chmod -x t2/non_perl/test.c
 %if !%{with perl_Test2_Harness_enables_coverage}
 for T in t/integration/coverage{,2,3,4}.t; do
@@ -266,6 +261,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Mon Nov 01 2021 Petr Pisar <ppisar@redhat.com> - 1.0.79-1
+- 1.000079 bump
+
 * Fri Oct 29 2021 Petr Pisar <ppisar@redhat.com> - 1.0.78-1
 - 1.000078 bump
 
