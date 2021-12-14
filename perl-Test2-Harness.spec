@@ -2,8 +2,8 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000082
-Version:        1.0.82
+%global cpan_version 1.000088
+Version:        1.0.88
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -223,7 +223,7 @@ cp -a %{_libexecdir}/%{name}/* "$DIR"
 pushd "$DIR"
 unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
     FAILURE_DO_PASS GIT_BRANCH GIT_COMMAND GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
-    HARNESS_IS_VERBOSE RESOURCE_TEST \
+    HARNESS_IS_VERBOSE NESTED_YATH RESOURCE_TEST \
     T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_JOB_FILE \
     T2_HARNESS_STAGE
 export AUTOMATED_TESTING=1
@@ -237,7 +237,7 @@ chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 %check
 unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
     FAILURE_DO_PASS GIT_BRANCH GIT_COMMAND GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
-    HARNESS_IS_VERBOSE RESOURCE_TEST \
+    HARNESS_IS_VERBOSE NESTED_YATH RESOURCE_TEST \
     T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_JOB_FILE \
     T2_HARNESS_STAGE
 export AUTOMATED_TESTING=1
@@ -261,6 +261,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Tue Dec 14 2021 Petr Pisar <ppisar@redhat.com> - 1.0.88-1
+- 1.000088 bump
+
 * Fri Nov 19 2021 Petr Pisar <ppisar@redhat.com> - 1.0.82-1
 - 1.000082 bump
 
