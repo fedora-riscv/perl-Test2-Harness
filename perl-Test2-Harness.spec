@@ -4,11 +4,16 @@
 Name:           perl-Test2-Harness
 %global cpan_version 1.000113
 Version:        1.0.113
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test2-Harness-%{cpan_version}.tar.gz
+# Fix Test2::Harness::Runner::Reloader::reset() not to call blocking() method
+# in case of no Linux::Inotify2, bug #2067332,
+# <https://github.com/Test-More/Test2-Harness/issues/247>, proposed to an
+# upstream
+Patch0:         Test2-Harness-1.000113-Fix-Test2-Harness-Runner-Reloader-reset-not-to-call-.patch
 # Help generators to recognize a Perl code
 Patch99:        Test2-Harness-1.000043-Adapt-tests-to-shebangs.patch
 BuildArch:      noarch
@@ -183,6 +188,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 %setup -q -n Test2-Harness-%{cpan_version}
+%patch0 -p1
 chmod -x t2/non_perl/test.c
 %if !%{with perl_Test2_Harness_enables_coverage}
 for T in t/integration/coverage{,2,3,4}.t; do
@@ -262,6 +268,10 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Thu Mar 24 2022 Petr Pisar <ppisar@redhat.com> - 1.0.113-2
+- Fix Test2::Harness::Runner::Reloader::reset() not to call blocking() method
+  in case of no Linux::Inotify2 (bug #2067332)
+
 * Thu Mar 24 2022 Petr Pisar <ppisar@redhat.com> - 1.0.113-1
 - 1.000113 bump
 
