@@ -1,4 +1,4 @@
-From ff362eb063ee60c9f9143e74b99c57b96d0f5f33 Mon Sep 17 00:00:00 2001
+From ae8586603a0b39ef7f9b64e8ef5c65daab03fb11 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
 Date: Mon, 8 Mar 2021 13:04:08 +0100
 Subject: [PATCH] Adapt tests to shebangs
@@ -6,15 +6,29 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The test files read itself and check the first line.
+The test files read themselves and check the first line.
 
 Signed-off-by: Petr Písař <ppisar@redhat.com>
 ---
+ t/unit/Test2/Harness/Util.t            | 2 +-
  t/unit/Test2/Harness/Util/File.t       | 9 +++++----
  t/unit/Test2/Harness/Util/File/Value.t | 3 ++-
  t2/caller.t                            | 5 +++--
- 3 files changed, 10 insertions(+), 7 deletions(-)
+ 4 files changed, 11 insertions(+), 8 deletions(-)
 
+diff --git a/t/unit/Test2/Harness/Util.t b/t/unit/Test2/Harness/Util.t
+index 1fb12b9..119c274 100644
+--- a/t/unit/Test2/Harness/Util.t
++++ b/t/unit/Test2/Harness/Util.t
+@@ -17,7 +17,7 @@ imported_ok qw{
+     is_same_file
+ };
+ 
+-my ($line) = split /\n/, read_file(__FILE__), 2;
++my (undef, $line) = split /\n/, read_file(__FILE__), 3;
+ like(
+     $line,
+     q{use Test2::Bundle::Extended -target => 'Test2::Harness::Util';},
 diff --git a/t/unit/Test2/Harness/Util/File.t b/t/unit/Test2/Harness/Util/File.t
 index 73a1587..1560d4b 100644
 --- a/t/unit/Test2/Harness/Util/File.t
@@ -99,5 +113,5 @@ index 6fd43d4..3406795 100644
 \ No newline at end of file
 +done_testing;
 -- 
-2.26.2
+2.34.1
 
