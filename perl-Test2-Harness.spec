@@ -2,8 +2,8 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000117
-Version:        1.0.117
+%global cpan_version 1.000119
+Version:        1.0.119
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
@@ -64,6 +64,7 @@ BuildRequires:  perl(Storable)
 BuildRequires:  perl(Sys::Hostname)
 BuildRequires:  perl(Term::ANSIColor) >= 4.03
 BuildRequires:  perl(Term::Table) >= 0.015
+BuildRequires:  perl(Test::Builder::Formatter) >= 1.302170
 BuildRequires:  perl(Test2::API) >= 1.302170
 BuildRequires:  perl(Test2::Event) >= 1.302170
 BuildRequires:  perl(Test2::Formatter) >= 1.302170
@@ -82,7 +83,7 @@ BuildRequires:  perl(Test2::Util::HashBase)
 BuildRequires:  perl(Test2::Util::Table)
 BuildRequires:  perl(Test2::Util::Term) >= 0.000127
 BuildRequires:  perl(Test2::Util::Times)
-BuildRequires:  perl(Test::Builder::Formatter) >= 1.302170
+BuildRequires:  perl(Text::ParseWords)
 BuildRequires:  perl(Time::HiRes)
 # Win32::Console::ANSI not used on Linux
 # Tests:
@@ -262,6 +263,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Wed Apr 06 2022 Petr Pisar <ppisar@redhat.com> - 1.0.119-1
+- 1.000119 bump
+
 * Tue Apr 05 2022 Petr Pisar <ppisar@redhat.com> - 1.0.117-1
 - 1.000117 bump
 
