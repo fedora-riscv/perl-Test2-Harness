@@ -4,7 +4,7 @@
 Name:           perl-Test2-Harness
 %global cpan_version 1.000124
 Version:        1.0.124
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL+ or Artistic
 URL:            https://metacpan.org/release/Test2-Harness
@@ -263,6 +263,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Wed Jun 01 2022 Jitka Plesnikova <jplesnik@redhat.com> - 1.0.124-2
+- Perl 5.36 rebuild
+
 * Mon Apr 11 2022 Petr Pisar <ppisar@redhat.com> - 1.0.124-1
 - 1.000124 bump
 
