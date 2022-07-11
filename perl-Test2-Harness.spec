@@ -2,11 +2,11 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000124
-Version:        1.0.124
-Release:        2%{?dist}
+%global cpan_version 1.000125
+Version:        1.0.125
+Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
-License:        GPL+ or Artistic
+License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test2-Harness
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test2-Harness-%{cpan_version}.tar.gz
 # Help generators to recognize a Perl code
@@ -263,6 +263,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Mon Jul 11 2022 Petr Pisar <ppisar@redhat.com> - 1.0.125-1
+- 1.000125 bump
+
 * Wed Jun 01 2022 Jitka Plesnikova <jplesnik@redhat.com> - 1.0.124-2
 - Perl 5.36 rebuild
 
