@@ -2,8 +2,8 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000125
-Version:        1.0.125
+%global cpan_version 1.000126
+Version:        1.0.126
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -26,6 +26,7 @@ BuildRequires:  perl(warnings)
 # git not used by App::Yath::Plugin::Git at the tests
 BuildRequires:  perl(B)
 BuildRequires:  perl(Carp)
+BuildRequires:  perl(Carp::Always)
 BuildRequires:  perl(constant)
 BuildRequires:  perl(Cwd)
 BuildRequires:  perl(Data::Dumper)
@@ -227,7 +228,9 @@ unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
     FAILURE_DO_PASS GIT_BRANCH GIT_COMMAND GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
     HARNESS_IS_VERBOSE NESTED_YATH RESOURCE_TEST \
     T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_JOB_FILE \
-    T2_HARNESS_STAGE TEST2_HARNESS_LOG_FORMAT YATH_LOG_FILE_FORMAT
+    T2_HARNESS_STAGE \
+    TEST2_HARNESS_LOG_FORMAT TEST2_HARNESS_NO_WRITE_TEST_INFO \
+    YATH_LOG_FILE_FORMAT
 export AUTOMATED_TESTING=1
 T2_HARNESS_JOB_COUNT="$(getconf _NPROCESSORS_ONLN)" ./test.pl
 prove -I . -j "$(getconf _NPROCESSORS_ONLN)" -r ./t
@@ -241,7 +244,9 @@ unset AUTHOR_TESTING AUTOMATED_TESTING DBI_PROFILE FAIL_ALWAYS FAIL_ONCE \
     FAILURE_DO_PASS GIT_BRANCH GIT_COMMAND GIT_LONG_SHA GIT_SHORT_SHA GIT_STATUS \
     HARNESS_IS_VERBOSE NESTED_YATH RESOURCE_TEST \
     T2_HARNESS_IS_VERBOSE T2_HARNESS_JOB_IS_TRY T2_HARNESS_JOB_FILE \
-    T2_HARNESS_STAGE TEST2_HARNESS_LOG_FORMAT YATH_LOG_FILE_FORMAT
+    T2_HARNESS_STAGE \
+    TEST2_HARNESS_LOG_FORMAT TEST2_HARNESS_NO_WRITE_TEST_INFO \
+    YATH_LOG_FILE_FORMAT
 export AUTOMATED_TESTING=1
 export T2_HARNESS_JOB_COUNT=$(perl -e \
     'for (@ARGV) { $j=$1 if m/\A-j(\d+)\z/; }; $j=1 unless $j; print "$j"' -- \
@@ -263,6 +268,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Wed Aug 31 2022 Petr Pisar <ppisar@redhat.com> - 1.0.126-1
+- 1.000126 bump
+
 * Mon Jul 11 2022 Petr Pisar <ppisar@redhat.com> - 1.0.125-1
 - 1.000125 bump
 
