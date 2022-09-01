@@ -2,8 +2,8 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000126
-Version:        1.0.126
+%global cpan_version 1.000127
+Version:        1.0.127
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -26,7 +26,6 @@ BuildRequires:  perl(warnings)
 # git not used by App::Yath::Plugin::Git at the tests
 BuildRequires:  perl(B)
 BuildRequires:  perl(Carp)
-BuildRequires:  perl(Carp::Always)
 BuildRequires:  perl(constant)
 BuildRequires:  perl(Cwd)
 BuildRequires:  perl(Data::Dumper)
@@ -268,6 +267,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Thu Sep 01 2022 Petr Pisar <ppisar@redhat.com> - 1.0.127-1
+- 1.000127 bump
+
 * Wed Aug 31 2022 Petr Pisar <ppisar@redhat.com> - 1.0.126-1
 - 1.000126 bump
 
