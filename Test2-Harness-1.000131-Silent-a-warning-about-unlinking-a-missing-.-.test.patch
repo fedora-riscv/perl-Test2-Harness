@@ -1,0 +1,103 @@
+From 8b3e65d1e71f6963d73f4f74956a9a27a99b4829 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 7 Sep 2022 13:30:07 +0200
+Subject: [PATCH] Silent a warning about unlinking a missing ./.test_info.json
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Running tests in paralled caused t/integration/replay.t to fail on
+a spurious warning about a missing to-be-unlink ./.test_info.json:
+
+    $ AUTOMATED_TESTING=1 prove -l -j5 -r t/integration
+    [...]
+    # Failed test 'Replay has identical output to original'
+    # at t/integration/replay.t line 57.
+    # +-------------------------------+----+-------------------------------+
+    # | GOT                           | OP | CHECK                         |
+    # +-------------------------------+----+-------------------------------+
+    # | [  FAIL  ]  job  1  + Fail\n  | eq | [  FAIL  ]  job  1  + Fail\n  |
+    # | (  DIAG  )  job  1    Failed  |    | (  DIAG  )  job  1    Failed  |
+    # | test 'Fail'\n                 |    | test 'Fail'\n                 |
+    # | (  DIAG  )  job  1    at t/in |    | (  DIAG  )  job  1    at t/in |
+    # | tegration/replay/fail.tx line |    | tegration/replay/fail.tx line |
+    # |  4.\n                         |    |  4.\n                         |
+    # | (  DIAG  )  job  1    Seeded  |    | (  DIAG  )  job  1    Seeded  |
+    # | srand with seed '20220907' fr |    | srand with seed '20220907' fr |
+    # | om local date.\n              |    | om local date.\n              |
+    # | ( PASSED )  job  2    t/integ |    | ( PASSED )  job  2    t/integ |
+    # | ration/replay/pass.tx\n       |    | ration/replay/pass.tx\n       |
+    # | ( FAILED )  job  1    t/integ |    | ( FAILED )  job  1    t/integ |
+    # | ration/replay/fail.tx\n       |    | ration/replay/fail.tx\n       |
+    # | < REASON >  job  1    Test sc |    | < REASON >  job  1    Test sc |
+    # | ript returned error (Err: 1)\ |    | ript returned error (Err: 1)\ |
+    # | n                             |    | n                             |
+    # | < REASON >  job  1    Asserti |    | < REASON >  job  1    Asserti |
+    # | on failures were encountered  |    | on failures were encountered  |
+    # | (Count: 1)\n                  |    | (Count: 1)\n                  |
+    # | The following jobs failed:\n  |    | The following jobs failed:\n  |
+    # | +---------------------------- |    | +---------------------------- |
+    # | ----------+------------------ |    | ----------+------------------ |
+    # | ------------+\n               |    | ------------+\n               |
+    # | | Job ID                      |    | | Job ID                      |
+    # |           | Test File         |    |           | Test File         |
+    # |             |\n               |    |             |\n               |
+    # | +---------------------------- |    | +---------------------------- |
+    # | ----------+------------------ |    | ----------+------------------ |
+    # | ------------+\n               |    | ------------+\n               |
+    # | | AD1B6644-2E83-11ED-AA61-A48 |    | | AD1B6644-2E83-11ED-AA61-A48 |
+    # | 93E685913 | t/integration/rep |    | 93E685913 | t/integration/rep |
+    # | lay/fail.tx |\n               |    | lay/fail.tx |\n               |
+    # | +---------------------------- |    | +---------------------------- |
+    # | ----------+------------------ |    | ----------+------------------ |
+    # | ------------+\n               |    | ------------+\n               |
+    # | Yath Result Summary\n         |    | Yath Result Summary\n         |
+    # | Fail Count: 1\n               |    | Fail Count: 1\n               |
+    # | File Count: 2\n               |    | File Count: 2\n               |
+    # | Assertion Count: 2\n          |    | Assertion Count: 2\n          |
+    # | -->  Result: FAILED  <--\n    |    | -->  Result: FAILED  <--\n    |
+    # | \e[0m\n                       |    | \e[0m\n                       |
+    # |                               |    | Could not unlink: No such fil |
+    # |                               |    | e or directory at /home/test/ |
+    # |                               |    | rpmbuild/BUILD/Test2-Harness- |
+    # |                               |    | 1.000131/lib/App/Yath/Command |
+    # |                               |    | /test.pm line 271, <__ANONIO_ |
+    # |                               |    | _> line 21 during global dest |
+    # |                               |    | ruction.\n                    |
+    # +-------------------------------+----+-------------------------------+
+    # Command = /usr/bin/perl /home/test/rpmbuild/BUILD/Test2-Harness-1.000131/scripts/yath -D/home/test/rpmbuild/BUILD/Test2-Harness-1.000131/blib/lib replay /tmp/yathlog-35828-7tJNJBmR.jsonl
+    # Exit = 256
+
+This patch works around it by silenting the warning if the unlink failure was a
+missing file.
+
+https://github.com/Test-More/Test2-Harness/issues/256
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/App/Yath/Command/test.pm | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lib/App/Yath/Command/test.pm b/lib/App/Yath/Command/test.pm
+index 4b76f312..6eb75731 100644
+--- a/lib/App/Yath/Command/test.pm
++++ b/lib/App/Yath/Command/test.pm
+@@ -22,6 +22,7 @@ use Test2::Harness::Util::Term qw/USE_ANSI_COLOR/;
+ 
+ use File::Spec;
+ use Fcntl();
++use POSIX();
+ 
+ use Time::HiRes qw/sleep time/;
+ use List::Util qw/sum max min/;
+@@ -268,7 +269,7 @@ sub start {
+             job_count => $self->job_count,
+         });
+ 
+-        push @{$self->{+CLEANUP_SUBS}} => sub { unlink('./.test_info.json') or warn "Could not unlink: $!" };
++        push @{$self->{+CLEANUP_SUBS}} => sub { unlink('./.test_info.json') or $! == POSIX::ENOENT or warn "Could not unlink: $!" };
+ 
+         $ENV{TEST2_HARNESS_NO_WRITE_TEST_INFO} = 1;
+     }
+-- 
+2.37.3
+

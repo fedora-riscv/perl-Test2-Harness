@@ -2,13 +2,16 @@
 %bcond_without perl_Test2_Harness_enables_coverage
 
 Name:           perl-Test2-Harness
-%global cpan_version 1.000128
-Version:        1.0.128
+%global cpan_version 1.000131
+Version:        1.0.131
 Release:        1%{?dist}
 Summary:        Test2 Harness designed for the Test2 event system
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test2-Harness
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test2-Harness-%{cpan_version}.tar.gz
+# Correct parallel tests, bug #2124678,
+# <https://github.com/Test-More/Test2-Harness/issues/256>
+Patch0:         Test2-Harness-1.000131-Silent-a-warning-about-unlinking-a-missing-.-.test.patch
 # Help generators to recognize a Perl code
 Patch99:        Test2-Harness-1.000114-Adapt-tests-to-shebangs.patch
 BuildArch:      noarch
@@ -184,6 +187,7 @@ with "%{_libexecdir}/%{name}/test".
 
 %prep
 %setup -q -n Test2-Harness-%{cpan_version}
+%patch0 -p1
 chmod -x t2/non_perl/test.c
 %if !%{with perl_Test2_Harness_enables_coverage}
 for T in t/integration/coverage{,2,3,4}.t; do
@@ -267,6 +271,9 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
+* Wed Sep 07 2022 Petr Pisar <ppisar@redhat.com> - 1.0.131-1
+- 1.000131 bump
+
 * Mon Sep 05 2022 Petr Pisar <ppisar@redhat.com> - 1.0.128-1
 - 1.000128 bump
 
